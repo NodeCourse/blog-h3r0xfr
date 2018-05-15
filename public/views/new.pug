@@ -7,15 +7,17 @@ include head.pug
 				.title
 					h2
 						a(href='#') Écrire un article
-					p Complètez les champs pour ajouter un nouvel article
 			span.image.featured
-				form(action="", method="POST")
-					input(type="text", name="title", placeholder="Titre")
-					input(type="text", name="description", placeholder="Description")
-					input(type="text", name="content", placeholder="Contenu")
-					input(type="text", name="author", placeholder="Auteur")
-					input(type="text", name="category", placeholder="Catégorie")
-					input(type="submit", name="send", value="Envoyer")
+				form(action="", method="POST", enctype="multipart/form-data")
+					div
+						input(type="text", name="title", placeholder="Titre", required)
+						input(type="text", name="description", placeholder="Description", required)
+						input(type="text", name="content", placeholder="Contenu", required)
+						
+						p(style="font-weight:bold;margin:0;") Photo de l'article
+						input(type="file", name="photo", required)
+					div
+						input(type="submit", name="send", value="Envoyer")
 	// Footer
 	section#footer
 		ul.icons

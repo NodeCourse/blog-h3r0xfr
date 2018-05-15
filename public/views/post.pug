@@ -11,19 +11,19 @@ include head.pug
 				.meta
 					time.published #{post.createdAt}
 					a.author(href='#')
-						span.name #{post.author}
+						span.name Auteur
 						img(src='/images/avatar.jpg', alt='')
 			span.image.featured
-				img(src='/images/pic01.jpg', alt='')
+				img(src='/images/uploads/' + post.photo, alt='')
 			p #{post.content}
 			footer
 				ul.stats
 					li
-						a(href='#') General
+						a(href='#') Catégorie
 					li
-						a.icon.fa-heart(href='#') 28
+						a.icon.fa-heart(href='#') Upvote: 28
 					li
-						a.icon.fa-comment(href='#') 128
+						a.icon.fa-comment(href='#') Downvote: 128
 	// Footer
 	section#footer
 		ul.icons
