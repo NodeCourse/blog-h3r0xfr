@@ -1,0 +1,26 @@
+doctype html
+html
+	head
+		title Blog
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1')
+		link(rel='stylesheet', href='/assets/css/main.css')
+	body.single
+		if error
+			p.error
+				span.icon.fa-warning
+				span #{error}
+		// Wrapper
+		#wrapper
+			// Header
+			header#header
+				h1
+					a(href='/') Blog
+				nav.links
+					ul
+						li
+							a(href='/post/new') Écrire un article
+			// Footer
+			section#footer
+				ul.icons
+				p.copyright

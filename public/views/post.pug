@@ -1,0 +1,55 @@
+include head.pug
+	// Main
+	#main
+		// Post
+		article.post
+			header
+				.title
+					h2
+						a(href='#') #{post.title}
+					p #{post.description}
+				.meta
+					time.published #{post.createdAt}
+					a.author(href='#')
+						span.name #{post.author}
+						img(src='/images/avatar.jpg', alt='')
+			span.image.featured
+				img(src='/images/pic01.jpg', alt='')
+			p #{post.content}
+			footer
+				ul.stats
+					li
+						a(href='#') General
+					li
+						a.icon.fa-heart(href='#') 28
+					li
+						a.icon.fa-comment(href='#') 128
+	// Footer
+	section#footer
+		ul.icons
+			li
+				a.fa-twitter(href='#')
+					span.label Twitter
+			li
+				a.fa-facebook(href='#')
+					span.label Facebook
+			li
+				a.fa-instagram(href='#')
+					span.label Instagram
+			li
+				a.fa-rss(href='#')
+					span.label RSS
+			li
+				a.fa-envelope(href='#')
+					span.label Email
+		p.copyright
+			| © Untitled. Design: 
+			a(href='http://html5up.net') HTML5 UP
+			| . Images: 
+			a(href='http://unsplash.com') Unsplash
+			| .
+	// Scripts
+	script(src='/assets/js/jquery.min.js')
+	script(src='/assets/js/skel.min.js')
+	script(src='/assets/js/util.js')
+	script(src='/assets/js/main.js')

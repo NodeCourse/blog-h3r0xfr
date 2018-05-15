@@ -1,0 +1,47 @@
+include head.pug
+	// Main
+	#main
+		// Post
+		article.post
+			header
+				.title
+					h2
+						a(href='#') Écrire un article
+					p Complètez les champs pour ajouter un nouvel article
+			span.image.featured
+				form(action="", method="POST")
+					input(type="text", name="title", placeholder="Titre")
+					input(type="text", name="description", placeholder="Description")
+					input(type="text", name="content", placeholder="Contenu")
+					input(type="text", name="author", placeholder="Auteur")
+					input(type="text", name="category", placeholder="Catégorie")
+					input(type="submit", name="send", value="Envoyer")
+	// Footer
+	section#footer
+		ul.icons
+			li
+				a.fa-twitter(href='#')
+					span.label Twitter
+			li
+				a.fa-facebook(href='#')
+					span.label Facebook
+			li
+				a.fa-instagram(href='#')
+					span.label Instagram
+			li
+				a.fa-rss(href='#')
+					span.label RSS
+			li
+				a.fa-envelope(href='#')
+					span.label Email
+		p.copyright
+			| © Untitled. Design: 
+			a(href='http://html5up.net') HTML5 UP
+			| . Images: 
+			a(href='http://unsplash.com') Unsplash
+			| .
+	// Scripts
+	script(src='/assets/js/jquery.min.js')
+	script(src='/assets/js/skel.min.js')
+	script(src='/assets/js/util.js')
+	script(src='/assets/js/main.js')

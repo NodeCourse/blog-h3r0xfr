@@ -1,0 +1,56 @@
+include head.pug
+    // Main
+    #main
+        // Intro
+        section#intro
+            a.logo(href='#')
+                img(src='images/logo.jpg', alt='')
+            header
+                h2 Blog
+                p Bienvenue sur mon blog !
+        section
+            .mini-posts
+                // Mini Post
+                each post in posts
+                    article.mini-post
+                        header
+                            h3
+                                a(href='/post/' + post.id) #{post.title}
+                            time.published #{post.createdAt}
+                            a.author(href='#')
+                                img(src='images/avatar.jpg', alt='')
+                        a.image(href='/post/' + post.id)
+                            img(src='images/pic04.jpg', alt='')
+        // Footer
+        section#footer
+            ul.icons
+                li
+                    a.fa-twitter(href='#')
+                        span.label Twitter
+                li
+                    a.fa-facebook(href='#')
+                        span.label Facebook
+                li
+                    a.fa-instagram(href='#')
+                        span.label Instagram
+                li
+                    a.fa-rss(href='#')
+                        span.label RSS
+                li
+                    a.fa-envelope(href='#')
+                        span.label Email
+            p.copyright
+                | © Blog. Design: 
+                a(href='http://html5up.net') HTML5 UP
+                | . Images: 
+                a(href='http://unsplash.com') Unsplash
+                | .
+                            
+    // Sidebar
+    section#sidebar
+
+    // Scripts
+    script(src='assets/js/jquery.min.js')
+    script(src='assets/js/skel.min.js')
+    script(src='assets/js/util.js')
+    script(src='assets/js/main.js')
