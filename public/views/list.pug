@@ -8,6 +8,12 @@ include head.pug
             header
                 h2 Blog
                 p Bienvenue sur mon blog !
+            if user
+                p Utilisateur connecté : 
+                    b #{user.firstname} #{user.lastname} 
+                    | (
+                    a(href="/logout") Déconnexion
+                    | )
         section
             .mini-posts
                 // Mini Post

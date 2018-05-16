@@ -1,8 +1,9 @@
+const fs = require('fs');
 const dateFormat = require('dateformat');
 const formidable = require('formidable');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser'); // ?
 const session = require('express-session');
-const fs = require('fs');
 const express = require('express');
 const app = express();
 
@@ -10,10 +11,11 @@ const db = require('./database');
 const auth = require('./auth');
 
 app.set('view engine', 'pug');
-app.set("views", "public/views");
+app.set('views', 'public/views');
 app.use(express.static("public"));
 
 app.use(cookieParser(auth.secret));
+app.use(bodyParser.urlencoded({ extended: true })); // ?
 
 app.use(session({
     secret: auth.secret,
@@ -33,7 +35,8 @@ function showError(res, view, message) {
 app.get('/', (req, res) => {
     db.Post.findAll({ include: [db.Vote] }).then((data) => {
         res.render('list', {
-            posts: data
+            posts: data,
+            user: req.user
         });
     });
 });
@@ -53,8 +56,6 @@ app.get('/post/:id(\\d+)/', (req, res) => {
                 else if(element.action == 'down')
                     votes.down += 1;
             });
-
-            console.log(data.comments);
 
             res.render('post', {
                 post: data,
@@ -151,6 +152,11 @@ app.post('/login',
         failureRedirect: '/login'
     })
 );
+
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
 
 app.get('/register', (req, res) => {
     res.render('register');

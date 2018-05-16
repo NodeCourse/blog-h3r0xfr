@@ -1,16 +1,18 @@
 const passport = require('passport');
+const Strategy = require('passport-strategy');
 const LocalStrategy = require('passport-local').Strategy;
+const db = require('./database');
 
 const COOKIE_SECRET = '8fywWLR4tWnLRZV063rW';
 
-passport.use(new LocalStrategy((email, password, cb) => {
+passport.use(new LocalStrategy((email, password, done) => {
 
     db.User
         .findOne({ email })
-        .then(function (user) {
-            if (!user || !user.validPassword(password)) {
+        .then((user) => {
+            if (!user || password != user.password) {
                 return done(null, false, {
-                    message: 'Invalid credentials'
+                    message: 'Les identifiants sont invalides.'
                 });
             }
 
