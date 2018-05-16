@@ -19,12 +19,15 @@ $(document).ready(function() {
             if(result.id) {
                 $('.no-comment').remove();
 
-                let html;
-                html += '<h5>' + result.title + '</h5>';
+                $('#title').val('');
+                $('#content').val('');
+                $('#author').val('');
+
+                let html = '<h5>' + result.title + '</h5>';
                 html += '<p>' + result.content + '</p>';
                 html += '<small>Posté par <span>' + result.author + '</span> le <span>' + result.createdAt + '</span></small><hr>';
 
-                $('.comments').append(html);
+                $('.comments').prepend(html);
             }
         });
     });

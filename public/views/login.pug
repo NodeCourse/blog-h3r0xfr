@@ -1,0 +1,47 @@
+include head.pug
+	// Main
+	#main
+		// Post
+		article.post
+			header
+				.title
+					h2
+						a(href='#') Connexion
+			span.image.featured
+				form(action="", method="POST")
+					div
+						input(type="email", name="email", placeholder="Adresse e-mail", required)
+						input(type="password", name="password", placeholder="Mot de passe", required)
+					div
+						input(type="submit", name="send", value="Valider")
+					p Pas encore de compte ? 
+						a(href='/register') Créer un compte
+	// Footer
+	section#footer
+		ul.icons
+			li
+				a.fa-twitter(href='#')
+					span.label Twitter
+			li
+				a.fa-facebook(href='#')
+					span.label Facebook
+			li
+				a.fa-instagram(href='#')
+					span.label Instagram
+			li
+				a.fa-rss(href='#')
+					span.label RSS
+			li
+				a.fa-envelope(href='#')
+					span.label Email
+		p.copyright
+			| © Untitled. Design: 
+			a(href='http://html5up.net') HTML5 UP
+			| . Images: 
+			a(href='http://unsplash.com') Unsplash
+			| .
+	// Scripts
+	//script(src='/assets/js/jquery.min.js')
+	script(src='/assets/js/skel.min.js')
+	script(src='/assets/js/util.js')
+	script(src='/assets/js/main.js')

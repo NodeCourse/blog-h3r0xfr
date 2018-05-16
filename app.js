@@ -1,14 +1,28 @@
 const dateFormat = require('dateformat');
 const formidable = require('formidable');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const fs = require('fs');
 const express = require('express');
 const app = express();
 
 const db = require('./database');
+const auth = require('./auth');
 
 app.set('view engine', 'pug');
 app.set("views", "public/views");
 app.use(express.static("public"));
+
+app.use(cookieParser(auth.secret));
+
+app.use(session({
+    secret: auth.secret,
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(auth.passport.initialize())
+app.use(auth.passport.session());
 
 function showError(res, view, message) {
     res.render(view, {
@@ -124,6 +138,46 @@ app.post('/post/:id/comment/add', (req, res) => {
         }).then((result) => {
             res.send(result);
         });
+    });
+});
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.post('/login',
+    auth.passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/login'
+    })
+);
+
+app.get('/register', (req, res) => {
+    res.render('register');
+})
+
+app.post('/register', (req, res) => {
+    let form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+        let uFirstname = fields.firstname;
+        let uLastname = fields.lastname;
+        let uEmail = fields.email;
+        let uPassword = fields.password;
+
+        if(uFirstname !== '' && uLastname !== '' && uEmail !== '' && uPassword !== '')
+        {
+            db.User.create({
+                firstname: uFirstname,
+                lastname: uLastname,
+                email: uEmail,
+                password: uPassword
+            }).then((result) => {
+                res.redirect('/login?newUser');
+            });
+        }
+        else
+            return showError(res, 'register', 'Vous devez compléter tous les champs.');
     });
 });
 

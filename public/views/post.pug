@@ -38,7 +38,10 @@ include head.pug
 						div.comment-item
 							h5 #{comment.title}
 							p #{comment.content}
-							small Posté par <span>#{comment.author}</span> le <span>#{comment.createdAt}</span>
+							small Posté par 
+								span #{comment.author} 
+								| le 
+								span #{comment.createdAt}
 							hr
 				else
 					p.no-comment Aucun commentaire trouvé

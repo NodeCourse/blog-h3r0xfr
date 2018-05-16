@@ -24,6 +24,13 @@ const commentModel = db.define('comment', {
     author: { type: Sequelize.STRING }
 });
 
+const userModel = db.define('user', {
+    firstname: { type: Sequelize.STRING },
+    lastname: { type: Sequelize.STRING },
+    email: { type: Sequelize.STRING },
+    password: { type: Sequelize.STRING }
+});
+
 // Relations
 postModel.hasMany(voteModel);
 postModel.hasMany(commentModel);
@@ -38,5 +45,6 @@ db.sync();
 module.exports = {
     Post: postModel,
     Vote: voteModel,
-    Comment: commentModel
+    Comment: commentModel,
+    User: userModel
 };
