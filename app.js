@@ -1,21 +1,10 @@
-const Sequelize = require('sequelize');
 const dateFormat = require('dateformat');
 const formidable = require('formidable');
 const fs = require('fs');
 const express = require('express');
 const app = express();
 
-const db = new Sequelize('nodejs-blog', 'nodejs-blog', 'lolilol123', {
-    host: 'h3r0x.ovh',
-    dialect: 'mysql'
-});
-
-const Post = db.define('post', {
-    title: { type: Sequelize.STRING },
-    description: { type: Sequelize.STRING },
-    content: { type: Sequelize.STRING },
-    photo: { type: Sequelize.STRING }
-});
+const db = require('./database');
 
 app.set('view engine', 'pug');
 app.set("views", "public/views");
@@ -28,7 +17,7 @@ function showError(res, view, message) {
 }
 
 app.get('/', (req, res) => {
-    Post.findAll().then((data) => {
+    db.Post.findAll({ include: [db.Vote] }).then((data) => {
         res.render('list', {
             posts: data
         });
@@ -38,12 +27,24 @@ app.get('/', (req, res) => {
 app.get('/post/:id(\\d+)/', (req, res) => {
     let id = req.params.id;
 
-    Post.findById(id).then(function(data) {
+    db.Post.find({ where: {id: id}, include: [db.Vote, db.Comment] }).then(function(data) {
         if(!data) {
             res.redirect('/');
         } else {
+            let votes = {up: 0, down: 0};
+
+            data.votes.forEach(function(element) {
+                if(element.action == 'up')
+                    votes.up += 1;
+                else if(element.action == 'down')
+                    votes.down += 1;
+            });
+
+            console.log(data.comments);
+
             res.render('post', {
-                post: data
+                post: data,
+                votes: votes
             });
         }
     });
@@ -54,7 +55,6 @@ app.get('/post/new', (req, res) => {
 });
 
 app.post('/post/new', (req, res) => {
-
     let form = new formidable.IncomingForm();
 
     form.parse(req, function (err, fields, files) {
@@ -79,21 +79,51 @@ app.post('/post/new', (req, res) => {
                 }
             });
 
-            Post
-                .sync()
-                .then(() => {
-                    Post.create({
-                        title: pTitle,
-                        description: pDescription,
-                        content: pContent,
-                        photo: pPhoto.name
-                    }).then((result) => {
-                        res.redirect('/post/' + result.id);
-                    });
-                });
+            db.Post.create({
+                title: pTitle,
+                description: pDescription,
+                content: pContent,
+                photo: pPhoto.name
+            }).then((result) => {
+                res.redirect('/post/' + result.id);
+            });
         }
         else
             return showError(res, 'new', 'Vous devez compléter tous les champs.');
+    });
+});
+
+app.get('/post/:id/vote/:action', (req, res) => {
+    let id = req.params.id;
+    let action = req.params.action;
+
+    if(action == 'up' || action == 'down') {
+        db.Vote.create({
+            action: action,
+            postId: id
+        }).then((result) => {
+            res.send(result);
+        });
+    }
+});
+
+app.post('/post/:id/comment/add', (req, res) => {
+    let id = req.params.id;
+    let form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+        let cTitle = fields.title;
+        let cContent = fields.content;
+        let cAuthor = fields.author;
+
+        db.Comment.create({
+            title: cTitle,
+            content: cContent,
+            author: cAuthor,
+            postId: id
+        }).then((result) => {
+            res.send(result);
+        });
     });
 });
 

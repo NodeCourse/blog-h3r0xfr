@@ -2668,6 +2668,7 @@
 			-webkit-align-items: center;
 			-ms-align-items: center;
 			align-items: center;
+			font-size: 24px;
 		}
 
 			.post > footer .actions {
@@ -2681,6 +2682,7 @@
 				cursor: default;
 				list-style: none;
 				padding: 0;
+				margin: 0;
 			}
 
 				.post > footer .stats li {
@@ -3458,4 +3460,23 @@
 		.error .icon {
 			font-family: FontAwesome;
 			margin-right: 10px;
+		}
+
+		.new-comment {
+			display: flex;
+			width: 100%;
+		}
+
+		.comment-item p {
+			margin-bottom: 5px;
+		}
+
+		.comment-item small {
+			color: darkgrey;
+			font-size: 14px;
+		}
+
+		.comment-item span {
+			color: #737373;
+			font-weight: 500;
 		}

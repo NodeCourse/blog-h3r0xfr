@@ -16,14 +16,34 @@ include head.pug
 			span.image.featured
 				img(src='/images/uploads/' + post.photo, alt='')
 			p #{post.content}
-			footer
+			footer(style="width:100%;")
 				ul.stats
 					li
 						a(href='#') Catégorie
+				ul.stats(style="margin-left:auto;")
 					li
-						a.icon.fa-heart(href='#') Upvote: 28
+						a.icon.fa-arrow-up(href='#', data-action='up').vote #{votes.up}
 					li
-						a.icon.fa-comment(href='#') Downvote: 128
+						a.icon.fa-arrow-down(href='#', data-action='down').vote #{votes.down}
+			hr
+			h3 Commentaires
+			form.new-comment
+				input(type='text', id='author', placeholder='Nom', required)
+				input(type='text', id='title', placeholder='Titre', required)
+				input(type='text', id='content', placeholder='Message', required)
+				input(type='submit', value='Ajouter', style='height:44px;')
+			div.comments
+				if post.comments
+					each comment in post.comments
+						div.comment-item
+							h5 #{comment.title}
+							p #{comment.content}
+							small Posté par <span>#{comment.author}</span> le <span>#{comment.createdAt}</span>
+							hr
+				else
+					p.no-comment Aucun commentaire trouvé
+		script(src='/assets/js/ajax/vote.js')
+		script(src='/assets/js/ajax/comment.js')
 	// Footer
 	section#footer
 		ul.icons
@@ -49,7 +69,7 @@ include head.pug
 			a(href='http://unsplash.com') Unsplash
 			| .
 	// Scripts
-	script(src='/assets/js/jquery.min.js')
+	//script(src='/assets/js/jquery.min.js')
 	script(src='/assets/js/skel.min.js')
 	script(src='/assets/js/util.js')
 	script(src='/assets/js/main.js')
