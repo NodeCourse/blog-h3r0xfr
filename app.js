@@ -38,7 +38,7 @@ function render(req, res, view, params) {
 }
 
 function showError(res, view, message) {
-    render(req, res, 'new', {
+    render(req, res, view, {
         error: message
     });
 }
