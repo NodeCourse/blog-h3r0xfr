@@ -2,7 +2,6 @@ const fs = require('fs');
 const dateFormat = require('dateformat');
 const formidable = require('formidable');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser'); // ?
 const session = require('express-session');
 const express = require('express');
 const app = express();
@@ -14,9 +13,10 @@ app.set('view engine', 'pug');
 app.set('views', 'public/views');
 app.use(express.static("public"));
 
-app.use(cookieParser(auth.secret));
-app.use(bodyParser.urlencoded({ extended: true })); // ?
+app.locals.moment = require('moment');
+app.locals.moment.locale('fr');
 
+app.use(cookieParser(auth.secret));
 app.use(session({
     secret: auth.secret,
     resave: false,
@@ -26,25 +26,37 @@ app.use(session({
 app.use(auth.passport.initialize())
 app.use(auth.passport.session());
 
+function render(req, res, view, params) {
+    let data = params;
+
+    if(!params)
+        data = {};
+    if(req.user)
+        data.user = req.user;
+
+    res.render(view, data);
+}
+
 function showError(res, view, message) {
-    res.render(view, {
+    render(req, res, 'new', {
         error: message
     });
 }
 
 app.get('/', (req, res) => {
-    db.Post.findAll({ include: [db.Vote] }).then((data) => {
-        res.render('list', {
-            posts: data,
-            user: req.user
-        });
+    db.Post.findAll({ include: [db.Vote], order: [['createdAt', 'DESC']] }).then((data) => {
+        render(req, res, 'list', { posts: data });
     });
 });
 
 app.get('/post/:id(\\d+)/', (req, res) => {
     let id = req.params.id;
 
-    db.Post.find({ where: {id: id}, include: [db.Vote, db.Comment] }).then(function(data) {
+    db.Post.find({
+        where: {id: id},
+        include: [db.Vote, db.Comment],
+        order: [[db.Comment, 'createdAt', 'DESC']]
+    }).then(function(data) {
         if(!data) {
             res.redirect('/');
         } else {
@@ -57,7 +69,7 @@ app.get('/post/:id(\\d+)/', (req, res) => {
                     votes.down += 1;
             });
 
-            res.render('post', {
+            render(req, res, 'post', {
                 post: data,
                 votes: votes
             });
@@ -66,7 +78,7 @@ app.get('/post/:id(\\d+)/', (req, res) => {
 });
 
 app.get('/post/new', (req, res) => {
-    res.render('new');
+    render(req, res, 'new');
 });
 
 app.post('/post/new', (req, res) => {
@@ -117,7 +129,7 @@ app.get('/post/:id/vote/:action', (req, res) => {
             action: action,
             postId: id
         }).then((result) => {
-            res.send(result);
+            res.json(result);
         });
     }
 });
@@ -137,21 +149,32 @@ app.post('/post/:id/comment/add', (req, res) => {
             author: cAuthor,
             postId: id
         }).then((result) => {
-            res.send(result);
+            res.json(result);
         });
     });
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    render(res, res, 'login');
 });
 
-app.post('/login',
-    auth.passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/login'
-    })
-);
+app.post('/login', (req, res, next) => {
+    let form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+
+        req.body = {
+            username: fields.username,
+            password: fields.password
+        };
+
+        auth.passport.authenticate('local', {
+            successRedirect: '/',
+            failureRedirect: '/login'
+        })(req, res, next);
+
+    });
+});
 
 app.get('/logout', function(req, res){
     req.logout();
@@ -159,7 +182,7 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/register', (req, res) => {
-    res.render('register');
+    render(req, res, 'register');
 })
 
 app.post('/register', (req, res) => {

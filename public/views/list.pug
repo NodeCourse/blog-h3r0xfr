@@ -8,12 +8,6 @@ include head.pug
             header
                 h2 Blog
                 p Bienvenue sur mon blog !
-            if user
-                p Utilisateur connecté : 
-                    b #{user.firstname} #{user.lastname} 
-                    | (
-                    a(href="/logout") Déconnexion
-                    | )
         section
             .mini-posts
                 // Mini Post
@@ -22,9 +16,7 @@ include head.pug
                         header
                             h3
                                 a(href='/post/' + post.id) #{post.title}
-                            time.published #{post.createdAt}
-                            a.author(href='#')
-                                img(src='images/avatar.jpg', alt='')
+                            time.published #{moment(post.createdAt).fromNow()}
                         a.image(href='/post/' + post.id)
                             img(src='images/uploads/' + post.photo, alt='')
         // Footer

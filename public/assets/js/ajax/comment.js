@@ -25,7 +25,7 @@ $(document).ready(function() {
 
                 let html = '<h5>' + result.title + '</h5>';
                 html += '<p>' + result.content + '</p>';
-                html += '<small>Posté par <span>' + result.author + '</span> le <span>' + result.createdAt + '</span></small><hr>';
+                html += '<small>Posté par <span>' + result.author + '</span> le ' + result.createdAt + '</small><hr>';
 
                 $('.comments').prepend(html);
             }

@@ -9,7 +9,7 @@ include head.pug
 						a(href='#') #{post.title}
 					p #{post.description}
 				.meta
-					time.published #{post.createdAt}
+					time.published #{moment(post.createdAt).fromNow()}
 					a.author(href='#')
 						span.name Auteur
 						img(src='/images/avatar.jpg', alt='')
@@ -40,8 +40,7 @@ include head.pug
 							p #{comment.content}
 							small Posté par 
 								span #{comment.author} 
-								| le 
-								span #{comment.createdAt}
+								| #{moment(comment.createdAt).fromNow()}
 							hr
 				else
 					p.no-comment Aucun commentaire trouvé
