@@ -1,5 +1,4 @@
 const fs = require('fs');
-const dateFormat = require('dateformat');
 const formidable = require('formidable');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
